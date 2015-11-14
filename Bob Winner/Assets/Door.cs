@@ -6,8 +6,10 @@ public class Door : MonoBehaviour {
     public int nbMap = 0;
     public float targetPos = -1.5f;
 
-	// Use this for initialization
-	void Start () {
+    public bool Horizontal = false;
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -21,7 +23,11 @@ public class Door : MonoBehaviour {
             Manager.currMap.SetActive(false);
             Manager.currMap = Manager.Maps[nbMap];
             Manager.currMap.SetActive(true);
-            other.transform.position = new Vector2(transform.position.x, targetPos);
+
+            if(Horizontal)
+                other.transform.position = new Vector2(targetPos, transform.position.y);
+            else
+                other.transform.position = new Vector2(transform.position.x, targetPos);
         }
     }
 }
