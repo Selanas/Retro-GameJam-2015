@@ -25,12 +25,12 @@ public class Hero : MonoBehaviour {
     bool facingRight = true;
 
     private Rigidbody2D body2D;
+    private Animator anim;
 
     // Use this for initialization
     void Start() {
-
-       // Screen.SetResolution(128, 128, true);
-
+        // Screen.SetResolution(128, 128, true);
+        anim = GetComponent<Animator>();
         body2D = GetComponent<Rigidbody2D>();
         Attack.SetActive(false);
         life = lifeMax;
@@ -39,6 +39,8 @@ public class Hero : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate() {
+
+        
 
         if (move.x > 0 && !facingRight)
             Flip();
@@ -58,6 +60,8 @@ public class Hero : MonoBehaviour {
     }
 
     void Update() {
+
+        anim.SetFloat("Velocity", body2D.velocity.magnitude);
 
         lifeText01.text = "Vie: " + life + "%";
         lifeText02.text = "Vie: " + life + "%";
