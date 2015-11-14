@@ -1,7 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Hero : MonoBehaviour {
+
+    [Header("HUD")]
+    public Text lifeText01;
+    public Text lifeText02;
+
+    [Header("Life")]
+    public int lifeMax = 100;
+    private int life = 100;
+    private bool damaged = false;
 
     [Header("Attack")]
     public GameObject Attack;
@@ -18,8 +28,13 @@ public class Hero : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
+       // Screen.SetResolution(128, 128, true);
+
         body2D = GetComponent<Rigidbody2D>();
         Attack.SetActive(false);
+        life = lifeMax;
+        damaged = false;
     }
 
     // Update is called once per frame
@@ -43,7 +58,11 @@ public class Hero : MonoBehaviour {
     }
 
     void Update() {
-        if(Input.GetButtonDown("Attack") && !Attack.activeSelf) {
+
+        lifeText01.text = "Vie: " + life + "%";
+        lifeText02.text = "Vie: " + life + "%";
+
+        if (Input.GetButtonDown("Attack") && !Attack.activeSelf) {
             StartCoroutine(Attacking());
         }
     }
@@ -60,5 +79,29 @@ public class Hero : MonoBehaviour {
         transform.eulerAngles += Vector3.up * 180;
         //theScale.x *= -1;
         //transform.localScale = theScale;
+    }
+
+    IEnumerator TakeDamage () {
+        damaged = true;
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
+        damaged = false;
+    }
+
+    void OnTriggerEnter2D (Collider2D other) {
+        if(other.gameObject.CompareTag("EnemyAttack") && !damaged) {
+            StartCoroutine(TakeDamage());
+            other.gameObject.SetActive(false);
+            life -= other.gameObject.GetComponent<Damage>().dmg;
+        }
     }
 }
