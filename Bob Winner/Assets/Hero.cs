@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class Hero : MonoBehaviour {
 
+    public GameObject sprite;
+
     [Header("HUD")]
     public Text lifeText01;
     public Text lifeText02;
@@ -30,7 +32,7 @@ public class Hero : MonoBehaviour {
     // Use this for initialization
     void Start() {
         // Screen.SetResolution(128, 128, true);
-        anim = GetComponent<Animator>();
+        anim = sprite.GetComponent<Animator>();
         body2D = GetComponent<Rigidbody2D>();
         Attack.SetActive(false);
         life = lifeMax;
@@ -57,6 +59,8 @@ public class Hero : MonoBehaviour {
         move.x *= maxSpeed;
         move.y *= maxSpeed*0.8f;
         body2D.velocity = Vector2.Lerp(body2D.velocity, move, Time.deltaTime * 50);
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
     }
 
     void Update() {
@@ -98,6 +102,18 @@ public class Hero : MonoBehaviour {
         GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(0.1f);
         GetComponent<SpriteRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().enabled = true;
         damaged = false;
     }
 
@@ -109,6 +125,11 @@ public class Hero : MonoBehaviour {
         }
 
         if (other.gameObject.CompareTag("Trap") && !damaged) {
+            StartCoroutine(TakeDamage());
+            life -= other.gameObject.GetComponent<Damage>().dmg;
+        }
+
+        if (other.gameObject.CompareTag("Enemy") && !damaged) {
             StartCoroutine(TakeDamage());
             life -= other.gameObject.GetComponent<Damage>().dmg;
         }

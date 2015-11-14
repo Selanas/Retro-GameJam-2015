@@ -25,9 +25,9 @@ public class Door : MonoBehaviour {
             Manager.currMap.SetActive(true);
 
             if(Horizontal)
-                other.transform.position = new Vector2(targetPos, transform.position.y);
+                other.transform.position = new Vector2(targetPos, other.transform.position.y);
             else
-                other.transform.position = new Vector2(transform.position.x, targetPos);
+                other.transform.position = new Vector2(other.transform.position.x, targetPos);
         }
     }
 }
