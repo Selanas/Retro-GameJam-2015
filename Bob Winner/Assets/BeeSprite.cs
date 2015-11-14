@@ -12,6 +12,7 @@ public class Bee : MonoBehaviour {
 
 	// Use this for initialization
 	void OnEnable() {
+		VSpeed = Mathf.Abs(VSpeed);
         transform.position = mainBee.transform.position + new Vector3(0, 0.375f,0);
         time = 0;
 	}
