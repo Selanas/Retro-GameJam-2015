@@ -20,7 +20,7 @@ public class LastDoor : MonoBehaviour {
 
     IEnumerator Ending () {
         yield return new WaitForSeconds(EndTime);
-        Application.LoadLevel(0);
+        Application.LoadLevel(2);
     }
 
     void OnTriggerEnter2D (Collider2D other) {

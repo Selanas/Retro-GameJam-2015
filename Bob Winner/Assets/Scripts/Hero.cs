@@ -20,7 +20,6 @@ public class Hero : MonoBehaviour {
     [Header("HUD")]
     public Text lifeText01;
     public Text lifeText02;
-	public GameObject Select;
 	public GameObject PunchIcon;
 	public GameObject GunIcon;
 	public GameObject WhipIcon;
@@ -140,22 +139,48 @@ public class Hero : MonoBehaviour {
 
             if (hasPunch || hasGun || hasWhip) {
 
-            if (selectedAttack == 0 && !hasPunch)
+            if (selectedAttack == 0 && !hasPunch) {
+                
                 selectedAttack = 1;
-            if (selectedAttack == 1 && !hasGun)
+            }
+            if (selectedAttack == 1 && !hasGun) {
                 selectedAttack = 2;
-            if (selectedAttack == 2 && !hasWhip)
-                selectedAttack = 0;
+            }
+            if (selectedAttack == 2 && !hasWhip) {
+                    selectedAttack = 0;
+            }
 
-            if (selectedAttack == 0)
-                Select.transform.position = Vector2.Lerp(Select.transform.position, PunchIcon.transform.position, Time.deltaTime * 20);
-            if (selectedAttack == 1)
-                Select.transform.position = Vector2.Lerp(Select.transform.position, GunIcon.transform.position, Time.deltaTime * 20);
-            if (selectedAttack == 2)
-                Select.transform.position = Vector2.Lerp(Select.transform.position, WhipIcon.transform.position, Time.deltaTime * 20);
+            if (selectedAttack == 0 && hasPunch) {
+
+                GunIcon.SetActive(false);
+                WhipIcon.SetActive(false);
+
+                if (!PunchIcon.activeSelf)
+                    PunchIcon.SetActive(true);
+            }
+            if (selectedAttack == 1 && hasGun) {
+                PunchIcon.SetActive(false);
+                WhipIcon.SetActive(false);
+
+                if (!GunIcon.activeSelf)
+                    GunIcon.SetActive(true);
+
+            }
+            if (selectedAttack == 2 && hasWhip) {
+                PunchIcon.SetActive(false);
+                GunIcon.SetActive(false);
+
+                if (!WhipIcon.activeSelf)
+                    WhipIcon.SetActive(true);
+                
+            }
+
+
         }
         else {
-            Select.transform.position = Vector2.Lerp(Select.transform.position, PunchIcon.transform.position, Time.deltaTime * 20);
+            PunchIcon.SetActive(false);
+            GunIcon.SetActive(false);
+            WhipIcon.SetActive(false);
         }
 
 		
@@ -380,19 +405,19 @@ public class Hero : MonoBehaviour {
 
         if (other.gameObject.CompareTag("PunchItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
-            PunchIcon.SetActive(true);
+            //PunchIcon.SetActive(true);
             hasPunch = true;
             Destroy(other.gameObject);
         }
         if (other.gameObject.CompareTag("GunItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
-            GunIcon.SetActive(true);
+            //GunIcon.SetActive(true);
             hasGun = true;
             Destroy(other.gameObject);
         }
         if (other.gameObject.CompareTag("WhipItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
-            WhipIcon.SetActive(true);
+            //WhipIcon.SetActive(true);
             hasWhip = true;
             Destroy(other.gameObject);
         }
