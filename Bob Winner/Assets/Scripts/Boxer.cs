@@ -55,6 +55,7 @@ public class Boxer : MonoBehaviour {
     void OnEnable() {
         transform.position = initPos;
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+        sprite.transform.position = transform.position + new Vector3(0, 0.985f,0);
         attacking = false;
         defending = false;
 
@@ -90,6 +91,9 @@ public class Boxer : MonoBehaviour {
             body2D.velocity = Vector2.zero;
             return;
         }
+
+        if (damaged)
+            return;
 
         Debug.Log(move);
 
@@ -138,10 +142,11 @@ public class Boxer : MonoBehaviour {
     }
 
     IEnumerator Kicking() {
-
+        attacking = true;
+        yield return new WaitForSeconds(0.5f);
         anim.SetTrigger("Kick");
 
-        attacking = true;
+        
         yield return new WaitForSeconds(0.1f);
         Kick.SetActive(true);
         yield return new WaitForSeconds(kickTime);
@@ -151,10 +156,11 @@ public class Boxer : MonoBehaviour {
     }
 
     IEnumerator Punching() {
-
+        attacking = true;
+        yield return new WaitForSeconds(0.5f);
         anim.SetTrigger("Punch");
 
-        attacking = true;
+        
         yield return new WaitForSeconds(0.1f);
         Punch.SetActive(true);
         yield return new WaitForSeconds(punchTime);
@@ -164,10 +170,11 @@ public class Boxer : MonoBehaviour {
     }
 
     IEnumerator Defending() {
-
+        attacking = true;
+        yield return new WaitForSeconds(0.5f);
         anim.SetTrigger("Defend");
 
-        attacking = true;
+        
         yield return new WaitForSeconds(0.1f);
         defending = true;
         yield return new WaitForSeconds(defendTime);
@@ -183,6 +190,30 @@ public class Boxer : MonoBehaviour {
         transform.eulerAngles += Vector3.up * 180;
         //theScale.x *= -1;
         //transform.localScale = theScale;
+    }
+
+    IEnumerator TakeDamagePunch() {
+        damaged = true;
+
+        Vector2 repousse = new Vector2(Mathf.Sign(target.transform.position.x - transform.position.x) * maxSpeed * -1, 0);
+        body2D.velocity = repousse;
+
+        anim.SetTrigger("Heart");
+        SpriteRenderer spriteRend = sprite.GetComponent<SpriteRenderer>();
+
+        spriteRend.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        spriteRend.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        spriteRend.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        spriteRend.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        spriteRend.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        spriteRend.enabled = true;
+
+        damaged = false;
     }
 
     IEnumerator TakeDamage() {
@@ -229,7 +260,7 @@ public class Boxer : MonoBehaviour {
                 return;
             }
             Instantiate(HurtSFX, transform.position, Quaternion.identity);
-            StartCoroutine(TakeDamage());
+            StartCoroutine(TakeDamagePunch());
             life -= 30;
         }
 
