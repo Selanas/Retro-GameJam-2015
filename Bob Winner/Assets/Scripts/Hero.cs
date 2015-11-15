@@ -72,7 +72,7 @@ public class Hero : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        // Screen.SetResolution(128, 128, true);
+        
         anim = sprite.GetComponent<Animator>();
         body2D = GetComponent<Rigidbody2D>();
 

@@ -77,6 +77,8 @@ public class Boxer : MonoBehaviour {
         }
 
         if (life <= 0) {
+            Kick.SetActive(false);
+            Punch.SetActive(false);
             sprite.transform.position = transform.position + Vector3.up * 0.25f ;
             body2D.velocity = Vector2.zero;
             return;

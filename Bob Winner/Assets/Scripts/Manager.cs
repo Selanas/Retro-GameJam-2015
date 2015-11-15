@@ -13,6 +13,8 @@ public class Manager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        //Screen.SetResolution(128, 128, true);
+
         End = false;
         AllRelics = false;
 
