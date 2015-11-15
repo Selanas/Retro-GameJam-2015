@@ -69,7 +69,11 @@ public class Boxer : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
-        
+        if (Manager.End) {
+            anim.SetBool("Moving", false);
+            body2D.velocity = Vector2.zero;
+            return;
+        }
 
         if (life <= 0) {
             sprite.transform.position = transform.position + Vector3.up * 0.25f ;
@@ -119,6 +123,10 @@ public class Boxer : MonoBehaviour {
     }
 
     void Update() {
+
+        if (Manager.End)
+            return;
+
         anim.SetBool("Dead", life <= 0);
 
         if (life <= 0)
@@ -198,6 +206,9 @@ public class Boxer : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+
+        if (Manager.End)
+            return;
 
         if (life <= 0)
             return;

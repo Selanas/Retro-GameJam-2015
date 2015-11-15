@@ -21,8 +21,11 @@ public class Bee : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (Manager.End) {
+            return;
+        }
 
-        if(time >= Timer) {
+        if (time >= Timer) {
             VSpeed = -VSpeed;
             time = 0;
         }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Manager : MonoBehaviour {
 
+    public static bool End = false;
+    public static bool AllRelics = false;
     public static GameObject currMap;
 
     public static GameObject[] Maps;
@@ -10,6 +12,10 @@ public class Manager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+        End = false;
+        AllRelics = false;
+
         Maps = maps;
 
         foreach(GameObject map in Maps) {

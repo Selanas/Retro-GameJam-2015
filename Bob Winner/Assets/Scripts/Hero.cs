@@ -99,6 +99,9 @@ public class Hero : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
+        if (Manager.End)
+            return;
+
         if (life <= 0)
             return;
 
@@ -123,10 +126,19 @@ public class Hero : MonoBehaviour {
 
     void Update() {
 
+        if (Manager.End) {
+            body2D.velocity = Vector2.zero;
+            return;
+        }
+
         if (life <= 0)
             return;
 
-        if(hasPunch || hasGun || hasWhip) {
+        if(MayaFragments[0].activeSelf && MayaFragments[1].activeSelf && MayaFragments[2].activeSelf) {
+            Manager.AllRelics = true;
+        }
+
+            if (hasPunch || hasGun || hasWhip) {
 
             if (selectedAttack == 0 && !hasPunch)
                 selectedAttack = 1;
@@ -207,7 +219,10 @@ public class Hero : MonoBehaviour {
             int rand = Random.Range(0, Sounds.Length);
             GetComponent<AudioSource>().clip = Sounds[rand];
             GetComponent<AudioSource>().Play();
+            sfxTimer = 0;
         }
+
+        sfxTimer += Time.deltaTime;
     }
 
     IEnumerator Kicking() {
@@ -319,6 +334,8 @@ public class Hero : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D other) {
 
+        if (Manager.End)
+            return;
 
         if (life <= 0)
             return;
@@ -345,42 +362,65 @@ public class Hero : MonoBehaviour {
             life -= other.gameObject.GetComponent<Damage>().dmg;
         }
 
-        if (other.gameObject.CompareTag("Maya01") && !damaged) {
+        if (other.gameObject.CompareTag("Maya01")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             MayaFragments[0].SetActive(true);
             Destroy(other.gameObject);
         }
-        if (other.gameObject.CompareTag("Maya02") && !damaged) {
+        if (other.gameObject.CompareTag("Maya02")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             MayaFragments[1].SetActive(true);
             Destroy(other.gameObject);
         }
-        if (other.gameObject.CompareTag("Maya03") && !damaged) {
+        if (other.gameObject.CompareTag("Maya03")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             MayaFragments[2].SetActive(true);
             Destroy(other.gameObject);
         }
 
-        if (other.gameObject.CompareTag("PunchItem") && !damaged) {
+        if (other.gameObject.CompareTag("PunchItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             PunchIcon.SetActive(true);
             hasPunch = true;
             Destroy(other.gameObject);
         }
-        if (other.gameObject.CompareTag("GunItem") && !damaged) {
+        if (other.gameObject.CompareTag("GunItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             GunIcon.SetActive(true);
             hasGun = true;
             Destroy(other.gameObject);
         }
-        if (other.gameObject.CompareTag("WhipItem") && !damaged) {
+        if (other.gameObject.CompareTag("WhipItem")) {
             Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
             WhipIcon.SetActive(true);
             hasWhip = true;
             Destroy(other.gameObject);
         }
 
-        if (life <= 0)
+        if (other.gameObject.CompareTag("Gateau")) {
+            Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
+            life += 15;
+            if (life > 100)
+                life = 100;
+            Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Boisson")) {
+            Instantiate(TakeItemSFX, transform.position, Quaternion.identity);
+            life += 25;
+            if (life > 100)
+                life = 100;
+            Destroy(other.gameObject);
+        }
+
+        if (life <= 0) {
             Instantiate(DeathSFX, transform.position, Quaternion.identity);
+            StartCoroutine(ReloadGame());
+        }
+    }
+
+    IEnumerator ReloadGame () {
+        yield return new WaitForSeconds(1);
+        Application.LoadLevel(1);
     }
 }

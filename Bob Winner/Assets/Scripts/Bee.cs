@@ -19,11 +19,19 @@ public class BeeSprite : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (Manager.End)
+            return;
+
         transform.Translate(Vector2.left * Speed * Time.deltaTime);
 	}
 
     void OnTriggerEnter2D (Collider2D other) {
-        if(other.gameObject.CompareTag("Kick")) {
+
+        if (Manager.End)
+            return;
+
+        if (other.gameObject.CompareTag("Kick")) {
             Instantiate(HurtSFX, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
