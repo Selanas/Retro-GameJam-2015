@@ -14,11 +14,16 @@ public class Hero : MonoBehaviour {
     public int lifeMax = 100;
     private int life = 100;
     private bool damaged = false;
-
+    
 
     public int maxAttack = 3;
     private int selectedAttack = 0;
     private bool attacking = false;
+    
+
+    [Header("Defense")]
+    private bool defending = false;
+    public float defendTime = 0.3f;
 
     [Header("Kick")]
     public GameObject Kick;
@@ -58,6 +63,7 @@ public class Hero : MonoBehaviour {
 
         selectedAttack = 0;
         attacking = false;
+        defending = false;
 
         Kick.SetActive(false);
         Punch.SetActive(false);
@@ -110,7 +116,11 @@ public class Hero : MonoBehaviour {
                 StartCoroutine(Whipping());
         }
 
-        if(Input.GetButtonDown("Switch") && !attacking) {
+        if (Input.GetButtonDown("Defend") && !attacking) {
+            StartCoroutine(Defending());
+        }
+
+        if (Input.GetButtonDown("Switch") && !attacking) {
             selectedAttack ++;
 
             if (selectedAttack == 1 && !hasPunch)
@@ -174,6 +184,20 @@ public class Hero : MonoBehaviour {
         attacking = false;
     }
 
+    IEnumerator Defending() {
+
+        anim.SetTrigger("Defend");
+
+        attacking = true;
+        yield return new WaitForSeconds(0.1f);
+        defending = true;
+        yield return new WaitForSeconds(defendTime);
+        defending = false;
+        yield return new WaitForSeconds(0.2f);
+        attacking = false;
+        
+    }
+
     void Flip() {
         facingRight = !facingRight;
         //Vector3 theScale = transform.localScale;
@@ -215,6 +239,11 @@ public class Hero : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D other) {
         if(other.gameObject.CompareTag("EnemyAttack") && !damaged) {
+
+            if (defending) {
+                return;
+            }
+
             StartCoroutine(TakeDamage());
             Destroy(other.gameObject);
             life -= other.gameObject.GetComponent<Damage>().dmg;
