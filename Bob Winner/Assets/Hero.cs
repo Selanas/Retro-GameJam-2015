@@ -15,9 +15,30 @@ public class Hero : MonoBehaviour {
     private int life = 100;
     private bool damaged = false;
 
-    [Header("Attack")]
-    public GameObject Attack;
-    public float attackTime = 0.3f;
+
+    public int maxAttack = 3;
+    private int selectedAttack = 0;
+    private bool attacking = false;
+
+    [Header("Kick")]
+    public GameObject Kick;
+    public float kickTime = 0.3f;
+
+    [Header("Punch")]
+    public bool hasPunch = false;
+    public GameObject Punch;
+    public float punchTime = 0.3f;
+
+    [Header("Gun")]
+    public bool hasGun = false;
+    public GameObject Gun;
+    public float gunTime = 0.3f;
+
+    [Header("Whip")]
+    public bool hasWhip = false;
+    public GameObject Whip;
+    public float whipTime = 0.3f;
+
 
     [Header("Movement")]
     public float maxSpeed = 10f;
@@ -34,7 +55,14 @@ public class Hero : MonoBehaviour {
         // Screen.SetResolution(128, 128, true);
         anim = sprite.GetComponent<Animator>();
         body2D = GetComponent<Rigidbody2D>();
-        Attack.SetActive(false);
+
+        selectedAttack = 0;
+        attacking = false;
+
+        Kick.SetActive(false);
+        Punch.SetActive(false);
+        Whip.SetActive(false);
+
         life = lifeMax;
         damaged = false;
     }
@@ -49,7 +77,7 @@ public class Hero : MonoBehaviour {
         else if (move.x < 0 && facingRight)
             Flip();
 
-        if (Attack.activeSelf) {
+        if (attacking) {
             body2D.velocity = Vector2.zero;
             return;
         }
@@ -65,20 +93,72 @@ public class Hero : MonoBehaviour {
 
     void Update() {
 
-        anim.SetFloat("Velocity", body2D.velocity.magnitude);
+        bool movement = Input.GetButton("Horizontal") || Input.GetButton("Vertical");
+        anim.SetBool("Moving", movement);
 
         lifeText01.text = "Vie: " + life + "%";
         lifeText02.text = "Vie: " + life + "%";
 
-        if (Input.GetButtonDown("Attack") && !Attack.activeSelf) {
-            StartCoroutine(Attacking());
+        if (Input.GetButtonDown("Attack") && !attacking) {
+            if(selectedAttack == 0)
+                StartCoroutine(Kicking());
+            if (selectedAttack == 1)
+                StartCoroutine(Punching());
+            if (selectedAttack == 2)
+                StartCoroutine(Shoot());
+            if (selectedAttack == 3)
+                StartCoroutine(Whipping());
+        }
+
+        if(Input.GetButtonDown("Switch") && !attacking) {
+            selectedAttack ++;
+
+            if (selectedAttack == 1 && !hasPunch)
+                selectedAttack = 2;
+            if (selectedAttack == 2 && !hasGun)
+                selectedAttack = 3;
+            if (selectedAttack == 3 && !hasWhip)
+                selectedAttack = 0;
+
+            if (selectedAttack > maxAttack)
+                selectedAttack = 0;
+
+            Debug.Log(selectedAttack);
         }
     }
 
-    IEnumerator Attacking () {
-        Attack.SetActive(true);
-        yield return new WaitForSeconds(attackTime);
-        Attack.SetActive(false);
+    IEnumerator Kicking() {
+        attacking = true;
+        Kick.SetActive(true);
+        yield return new WaitForSeconds(kickTime);
+        Kick.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        attacking = false;
+    }
+
+    IEnumerator Punching() {
+        attacking = true;
+        Punch.SetActive(true);
+        yield return new WaitForSeconds(punchTime);
+        Punch.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        attacking = false;
+    }
+
+    IEnumerator Shoot() {
+        attacking = true;
+        Instantiate(Gun,transform.TransformPoint(Vector2.right * 0.5f), transform.rotation);
+        yield return new WaitForSeconds(gunTime);
+        attacking = false;
+    }
+
+    IEnumerator Whipping () {
+        attacking = true;
+        Whip.SetActive(true);
+        yield return new WaitForSeconds(whipTime);
+        Whip.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        attacking = false;
     }
 
     void Flip() {
@@ -91,29 +171,32 @@ public class Hero : MonoBehaviour {
 
     IEnumerator TakeDamage () {
         damaged = true;
-        GetComponent<SpriteRenderer>().enabled = false;
+
+        SpriteRenderer spriteRend = sprite.GetComponent<SpriteRenderer>();
+
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = false;
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = false;
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = false;
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = false;
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = false;
+        spriteRend.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        GetComponent<SpriteRenderer>().enabled = true;
+        spriteRend.enabled = true;
         damaged = false;
     }
 

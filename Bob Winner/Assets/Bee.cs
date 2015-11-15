@@ -21,7 +21,16 @@ public class BeeSprite : MonoBehaviour {
 	}
 
     void OnTriggerEnter2D (Collider2D other) {
-        if(other.gameObject.CompareTag("HeroAttack")) {
+        if(other.gameObject.CompareTag("Kick")) {
+            gameObject.SetActive(false);
+        }
+        if (other.gameObject.CompareTag("Punch")) {
+            gameObject.SetActive(false);
+        }
+        if (other.gameObject.CompareTag("Bullet")) {
+            gameObject.SetActive(false);
+        }
+        if (other.gameObject.CompareTag("Whip")) {
             gameObject.SetActive(false);
         }
     }

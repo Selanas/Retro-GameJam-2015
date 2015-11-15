@@ -1,0 +1,26 @@
+Initialize engine version: 5.2.1f1 (44735ea161b3)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 560M   (ID=0x1251)
+    Vendor:   NVIDIA
+    VRAM:     3020 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\System.Core.dll (this message is harmless)
+- Completed reload, in  0.059 seconds
+desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: C:\Users\Antoine\Desktop\Retro-GameJam-2015\Bob V0.3\BobWinnerInSpaceV0.3_Data\Managed\System.dll (this message is harmless)
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 2200 -> priority: 1 
+  Thread -> id: 297c -> priority: 1 
