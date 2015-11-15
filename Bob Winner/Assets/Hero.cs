@@ -128,7 +128,11 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator Kicking() {
+
+        anim.SetTrigger("Kick");
+
         attacking = true;
+        yield return new WaitForSeconds(0.1f);
         Kick.SetActive(true);
         yield return new WaitForSeconds(kickTime);
         Kick.SetActive(false);
@@ -137,7 +141,11 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator Punching() {
+
+        anim.SetTrigger("Punch");
+
         attacking = true;
+        yield return new WaitForSeconds(0.1f);
         Punch.SetActive(true);
         yield return new WaitForSeconds(punchTime);
         Punch.SetActive(false);
@@ -146,14 +154,19 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator Shoot() {
+
+        anim.SetTrigger("Shoot");
+
         attacking = true;
-        Instantiate(Gun,transform.TransformPoint(Vector2.right * 0.5f), transform.rotation);
+        yield return new WaitForSeconds(0.1f);
+        Instantiate(Gun,transform.TransformPoint(Vector2.right * 0.1f), transform.rotation);
         yield return new WaitForSeconds(gunTime);
         attacking = false;
     }
 
     IEnumerator Whipping () {
         attacking = true;
+        yield return new WaitForSeconds(0.1f);
         Whip.SetActive(true);
         yield return new WaitForSeconds(whipTime);
         Whip.SetActive(false);
@@ -171,7 +184,7 @@ public class Hero : MonoBehaviour {
 
     IEnumerator TakeDamage () {
         damaged = true;
-
+        anim.SetTrigger("Heart");
         SpriteRenderer spriteRend = sprite.GetComponent<SpriteRenderer>();
 
         spriteRend.enabled = false;

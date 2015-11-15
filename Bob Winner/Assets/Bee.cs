@@ -28,6 +28,7 @@ public class BeeSprite : MonoBehaviour {
             gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Bullet")) {
+            Destroy(other.gameObject);
             gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Whip")) {
