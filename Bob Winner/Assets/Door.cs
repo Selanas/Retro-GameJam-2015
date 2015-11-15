@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Door : MonoBehaviour {
 
+    public GameObject DoorSFX;
+
     public int nbMap = 0;
     public float targetPos = -1.5f;
 
@@ -20,6 +22,9 @@ public class Door : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D other) {
         if(other.gameObject.CompareTag("Hero")) {
+
+            Instantiate(DoorSFX, transform.position, Quaternion.identity);
+
             Manager.currMap.SetActive(false);
             Manager.currMap = Manager.Maps[nbMap];
             Manager.currMap.SetActive(true);

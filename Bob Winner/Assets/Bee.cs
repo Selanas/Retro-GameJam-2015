@@ -3,6 +3,8 @@ using System.Collections;
 
 public class BeeSprite : MonoBehaviour {
 
+    public GameObject HurtSFX;
+
     private Vector3 initPos;
     public float Speed = 3;
 
@@ -22,16 +24,20 @@ public class BeeSprite : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D other) {
         if(other.gameObject.CompareTag("Kick")) {
+            Instantiate(HurtSFX, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Punch")) {
+            Instantiate(HurtSFX, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Bullet")) {
+            Instantiate(HurtSFX, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("Whip")) {
+            Instantiate(HurtSFX, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
         }
     }

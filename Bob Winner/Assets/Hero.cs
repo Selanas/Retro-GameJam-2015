@@ -4,6 +4,14 @@ using UnityEngine.UI;
 
 public class Hero : MonoBehaviour {
 
+    public GameObject DeathSFX;
+    public GameObject HurtSFX;
+    public GameObject KickSFX;
+    public GameObject PunchSFX;
+    public GameObject GunSFX;
+    public GameObject WhipSFX;
+    public GameObject SwitchSFX;
+
     public GameObject sprite;
 
     [Header("HUD")]
@@ -76,7 +84,8 @@ public class Hero : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
-        
+        if (life <= 0)
+            return;
 
         if (move.x > 0 && !facingRight)
             Flip();
@@ -99,8 +108,14 @@ public class Hero : MonoBehaviour {
 
     void Update() {
 
+        if (life <= 0)
+            return;
+
+        FootStep();
+
         bool movement = Input.GetButton("Horizontal") || Input.GetButton("Vertical");
         anim.SetBool("Moving", movement);
+        anim.SetBool("Dead", life <= 0);
 
         lifeText01.text = "Vie: " + life + "%";
         lifeText02.text = "Vie: " + life + "%";
@@ -122,6 +137,7 @@ public class Hero : MonoBehaviour {
 
         if (Input.GetButtonDown("Switch") && !attacking) {
             selectedAttack ++;
+            Instantiate(SwitchSFX, transform.position, Quaternion.identity);
 
             if (selectedAttack == 1 && !hasPunch)
                 selectedAttack = 2;
@@ -137,12 +153,30 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    IEnumerator Kicking() {
+    public AudioClip[] Sounds;
+    public float footVolume = 0.2f;
+    private float sfxTimer = 0;
 
+    void FootStep () {
+
+        if (body2D.velocity == Vector2.zero)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = footVolume;
+
+        if (sfxTimer >= GetComponent<AudioSource>().clip.length) {
+            int rand = Random.Range(0, Sounds.Length);
+            GetComponent<AudioSource>().clip = Sounds[rand];
+            GetComponent<AudioSource>().Play();
+        }
+    }
+
+    IEnumerator Kicking() {
         anim.SetTrigger("Kick");
 
         attacking = true;
         yield return new WaitForSeconds(0.1f);
+        Instantiate(KickSFX, transform.position, Quaternion.identity);
         Kick.SetActive(true);
         yield return new WaitForSeconds(kickTime);
         Kick.SetActive(false);
@@ -151,11 +185,12 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator Punching() {
-
+        
         anim.SetTrigger("Punch");
 
         attacking = true;
         yield return new WaitForSeconds(0.1f);
+        Instantiate(PunchSFX, transform.position, Quaternion.identity);
         Punch.SetActive(true);
         yield return new WaitForSeconds(punchTime);
         Punch.SetActive(false);
@@ -164,19 +199,23 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator Shoot() {
-
+        
         anim.SetTrigger("Shoot");
 
         attacking = true;
         yield return new WaitForSeconds(0.1f);
+        Instantiate(GunSFX, transform.position, Quaternion.identity);
         Instantiate(Gun,transform.TransformPoint(Vector2.right * 0.1f), transform.rotation);
         yield return new WaitForSeconds(gunTime);
         attacking = false;
     }
 
     IEnumerator Whipping () {
+
+        
         attacking = true;
         yield return new WaitForSeconds(0.1f);
+        Instantiate(WhipSFX, transform.position, Quaternion.identity);
         Whip.SetActive(true);
         yield return new WaitForSeconds(whipTime);
         Whip.SetActive(false);
@@ -207,6 +246,7 @@ public class Hero : MonoBehaviour {
     }
 
     IEnumerator TakeDamage () {
+        Instantiate(HurtSFX, transform.position, Quaternion.identity);
         damaged = true;
         anim.SetTrigger("Heart");
         SpriteRenderer spriteRend = sprite.GetComponent<SpriteRenderer>();
@@ -238,15 +278,21 @@ public class Hero : MonoBehaviour {
     }
 
     void OnTriggerEnter2D (Collider2D other) {
-        if(other.gameObject.CompareTag("EnemyAttack") && !damaged) {
+
+
+        if (life <= 0)
+            return;
+
+        if (other.gameObject.CompareTag("EnemyAttack") && !damaged) {
 
             if (defending) {
                 return;
             }
 
             StartCoroutine(TakeDamage());
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             life -= other.gameObject.GetComponent<Damage>().dmg;
+            
         }
 
         if (other.gameObject.CompareTag("Trap") && !damaged) {
@@ -258,5 +304,8 @@ public class Hero : MonoBehaviour {
             StartCoroutine(TakeDamage());
             life -= other.gameObject.GetComponent<Damage>().dmg;
         }
+
+        if (life <= 0)
+            Instantiate(DeathSFX, transform.position, Quaternion.identity);
     }
 }

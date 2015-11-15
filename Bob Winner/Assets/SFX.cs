@@ -8,7 +8,7 @@ public class SFX : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-        int rand = Random.RandomRange(0,Sounds.Length);
+        int rand = Random.Range(0,Sounds.Length);
         GetComponent<AudioSource>().clip = Sounds[rand];
         GetComponent<AudioSource>().Play();
 

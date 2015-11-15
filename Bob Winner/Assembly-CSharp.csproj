@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Bee.cs" />
      <Compile Include="Assets\BeeSprite.cs" />
+     <Compile Include="Assets\Boxer.cs" />
      <Compile Include="Assets\Bullet.cs" />
      <Compile Include="Assets\CamFollow.cs" />
      <Compile Include="Assets\Damage.cs" />
